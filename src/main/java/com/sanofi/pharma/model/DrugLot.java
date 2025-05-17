@@ -1,24 +1,29 @@
 package com.sanofi.pharma.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "drug")
+@Table(name = "drug_lot")
 @Data
-public class Drug {
+public class DrugLot {
     @Id
     private Long id;
+    private Long drugId;
     private String name;
-
-    /**
-     * Record creation timestamp (set automatically on insert).
-     */
+    private String manufacturer;
+    private String batchNumber;
+    private LocalDate expiryDate;
+    private Integer stock;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private Instant createdAt;

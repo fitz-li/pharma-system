@@ -5,11 +5,11 @@ import com.sanofi.pharma.model.Drug;
 import com.sanofi.pharma.model.DrugLot;
 import org.springframework.data.domain.Page;
 
-public interface DrugDao {
-    Drug create(Drug drug);
+public interface DrugLotDao {
+    DrugLot create(DrugLot drug);
 
-    Drug get(Long id);
+    DrugLot get(Long id);
 
-    Boolean exist(Long id);
+    Page<DrugLot> list(PaginationRequest pageRequest);
 
 }

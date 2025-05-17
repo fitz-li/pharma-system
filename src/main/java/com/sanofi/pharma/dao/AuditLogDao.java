@@ -1,15 +1,11 @@
 package com.sanofi.pharma.dao;
 
 import com.sanofi.pharma.dto.common.PaginationRequest;
-import com.sanofi.pharma.model.Drug;
+import com.sanofi.pharma.model.AuditLog;
 import com.sanofi.pharma.model.DrugLot;
 import org.springframework.data.domain.Page;
 
-public interface DrugDao {
-    Drug create(Drug drug);
-
-    Drug get(Long id);
-
-    Boolean exist(Long id);
+public interface AuditLogDao {
+    AuditLog create(AuditLog auditLog);
 
 }

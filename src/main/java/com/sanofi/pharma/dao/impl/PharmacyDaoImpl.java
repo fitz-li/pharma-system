@@ -28,4 +28,8 @@ public class PharmacyDaoImpl implements PharmacyDao {
         return pharmacyRepository.findAll(pageable);
     }
 
+    @Override
+    public Pharmacy get(Long id) {
+        return pharmacyRepository.getById(id);
+    }
 }

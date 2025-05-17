@@ -2,7 +2,10 @@ package com.sanofi.pharma.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -13,7 +16,14 @@ public class Pharmacy {
     private Long id;
     private String name;
     private String location;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant createdAt;
 
-    @OneToMany(mappedBy = "pharmacy")
-    private List<PharmacyDrugAllocation> allocations;
+    /**
+     * Record last update timestamp (set automatically on update).
+     */
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant updatedAt;
 }

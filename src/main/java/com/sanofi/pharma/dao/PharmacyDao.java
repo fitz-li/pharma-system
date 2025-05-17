@@ -8,5 +8,5 @@ public interface PharmacyDao {
 
     Page<Pharmacy> list(PaginationRequest pageRequest);
 
-
+    Pharmacy get(Long id);
 }

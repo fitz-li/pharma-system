@@ -68,9 +68,14 @@ public class IdGenerator {
         }
         lastTimestamp = timestamp;
         return ((timestamp - EPOCH) << TIMESTAMP_SHIFT)
-             | (datacenterId << DATACENTER_ID_SHIFT)
-             | (workerId << WORKER_ID_SHIFT)
-             | sequence;
+                | (datacenterId << DATACENTER_ID_SHIFT)
+                | (workerId << WORKER_ID_SHIFT)
+                | sequence;
+    }
+
+
+    public static long generateRelationId() {
+        return getInstance().nextId();
     }
 
     /**

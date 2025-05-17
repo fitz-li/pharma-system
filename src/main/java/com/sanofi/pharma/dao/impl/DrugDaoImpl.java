@@ -1,13 +1,8 @@
 package com.sanofi.pharma.dao.impl;
 
 import com.sanofi.pharma.dao.DrugDao;
-import com.sanofi.pharma.dto.common.PaginationRequest;
-import com.sanofi.pharma.model.Drug;
 import com.sanofi.pharma.dao.repository.DrugRepository;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import com.sanofi.pharma.model.Drug;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,9 +20,12 @@ public class DrugDaoImpl implements DrugDao {
     }
 
     @Override
-    public Page<Drug> list(@NotNull PaginationRequest pageRequest) {
-        Pageable pageable = PageRequest.of(pageRequest.getPageNum(), pageRequest.getPageSize());
-        return drugRepository.findAll(pageable);
+    public Drug get(Long id) {
+        return drugRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public Boolean exist(Long id) {
+        return drugRepository.existsById(id);
+    }
 }
