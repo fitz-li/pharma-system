@@ -1,15 +1,11 @@
 package com.sanofi.pharma.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDate;
 
 
 @Entity
@@ -18,11 +14,14 @@ import java.time.LocalDate;
 public class DrugLot {
     @Id
     private Long id;
-    private Long drugId;
+
+    @ManyToOne
+    @JoinColumn(name = "drug_id", nullable = false)
+    private Drug drug;
     private String name;
     private String manufacturer;
     private String batchNumber;
-    private LocalDate expiryDate;
+    private Instant expiryDate;
     private Integer stock;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")

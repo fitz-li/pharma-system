@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Data
 public class DrugLotCreateReq {
@@ -16,7 +16,7 @@ public class DrugLotCreateReq {
     @Max(20)
     private String manufacturer;
     private String batchNumber;
-    private LocalDate expiryDate;
+    private Instant expiryDate;
     private Integer stock;
 
     public DrugLot toEntity() {

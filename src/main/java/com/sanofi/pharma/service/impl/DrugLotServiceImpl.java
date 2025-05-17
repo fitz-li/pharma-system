@@ -12,7 +12,6 @@ import com.sanofi.pharma.service.DrugLotService;
 import com.sanofi.pharma.util.IdGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class DrugLotServiceImpl implements DrugLotService {
     }
 
     @Override
-    @Transactional
     public DrugLot create(DrugLotCreateReq req) {
         Drug drug = this.drugDao.get(req.getDrugId());
         if (drug == null) {

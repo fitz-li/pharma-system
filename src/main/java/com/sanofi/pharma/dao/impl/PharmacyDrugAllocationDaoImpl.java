@@ -5,6 +5,7 @@ import com.sanofi.pharma.dao.repository.PharmacyDrugAllocationRepository;
 import com.sanofi.pharma.model.PharmacyDrugAllocation;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -19,7 +20,7 @@ public class PharmacyDrugAllocationDaoImpl implements PharmacyDrugAllocationDao 
 
     @Override
     public List<PharmacyDrugAllocation> getByDrugId(Long drugId) {
-        return pharmacyDrugAllocationRepository.findByDrugId(drugId);
+        return pharmacyDrugAllocationRepository.findByDrugIdAndExpiryDateAfter(drugId, Instant.now());
     }
 
     @Override

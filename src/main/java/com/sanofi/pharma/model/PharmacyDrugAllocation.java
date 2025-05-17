@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDate;
 
 @Entity
 @Table(
@@ -34,7 +33,7 @@ public class PharmacyDrugAllocation {
 
     private Integer version;
 
-    private LocalDate expiryDate;
+    private Instant expiryDate;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
