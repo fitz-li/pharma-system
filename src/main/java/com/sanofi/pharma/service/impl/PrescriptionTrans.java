@@ -43,6 +43,8 @@ public class PrescriptionTrans {
         if (totalAffected < allocationList.size()) {
             throw new LockException();
         }
-        prescriptionDao.complete(id);
+        if (!prescriptionDao.complete(id)) {
+            throw new ApiException("RECORD_MODIFIED", "Prescription status modified");
+        }
     }
 }

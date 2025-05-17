@@ -1,7 +1,6 @@
 package com.sanofi.pharma.dao;
 
 import com.sanofi.pharma.dto.common.PaginationRequest;
-import com.sanofi.pharma.model.Drug;
 import com.sanofi.pharma.model.DrugLot;
 import org.springframework.data.domain.Page;
 

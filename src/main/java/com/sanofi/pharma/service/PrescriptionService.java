@@ -3,9 +3,6 @@ package com.sanofi.pharma.service;
 import com.sanofi.pharma.dto.api.prescription.FulfillDetail;
 import com.sanofi.pharma.dto.api.prescription.PrescriptionCreateReq;
 import com.sanofi.pharma.dto.api.prescription.PrescriptionFulfillReq;
-import com.sanofi.pharma.dto.common.ApiResponse;
-import com.sanofi.pharma.dto.common.PaginationRequest;
-import com.sanofi.pharma.model.Pharmacy;
 import com.sanofi.pharma.model.Prescription;
 import org.apache.coyote.BadRequestException;
 

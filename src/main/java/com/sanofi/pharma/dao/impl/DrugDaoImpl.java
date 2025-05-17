@@ -24,8 +24,4 @@ public class DrugDaoImpl implements DrugDao {
         return drugRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public Boolean exist(Long id) {
-        return drugRepository.existsById(id);
-    }
 }

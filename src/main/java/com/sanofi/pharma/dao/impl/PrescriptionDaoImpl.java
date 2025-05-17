@@ -22,11 +22,11 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
 
     @Override
     public Prescription get(Long id) {
-        return prescriptionRepository.getById(id);
+        return prescriptionRepository.findById(id).orElse(null);
     }
 
     @Override
-    public int complete(Long id) {
-        return prescriptionRepository.updateStatusById(id, PrescriptionStatus.FULFILLED);
+    public boolean complete(Long id) {
+        return prescriptionRepository.updateStatusById(id, PrescriptionStatus.FULFILLED) == 1;
     }
 }

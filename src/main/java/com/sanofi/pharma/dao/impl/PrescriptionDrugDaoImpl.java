@@ -1,10 +1,7 @@
 package com.sanofi.pharma.dao.impl;
 
-import com.sanofi.pharma.dao.PrescriptionDao;
 import com.sanofi.pharma.dao.PrescriptionDrugDao;
 import com.sanofi.pharma.dao.repository.PrescriptionDrugRepository;
-import com.sanofi.pharma.dao.repository.PrescriptionRepository;
-import com.sanofi.pharma.model.Prescription;
 import com.sanofi.pharma.model.PrescriptionDrug;
 import org.springframework.stereotype.Repository;
 

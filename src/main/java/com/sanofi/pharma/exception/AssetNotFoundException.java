@@ -1,6 +1,5 @@
 package com.sanofi.pharma.exception;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
