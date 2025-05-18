@@ -13,4 +13,6 @@ public interface PharmacyDao {
     Pharmacy create(Pharmacy pharmacy);
 
     void delete(Long id);
+
+    void clean();
 }

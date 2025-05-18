@@ -40,4 +40,9 @@ public class PharmacyDaoImpl implements PharmacyDao {
     public void delete(Long id) {
         pharmacyRepository.deleteById(id);
     }
+
+    @Override
+    public void clean() {
+        pharmacyRepository.deleteAll();
+    }
 }

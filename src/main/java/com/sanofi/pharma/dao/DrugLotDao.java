@@ -11,6 +11,8 @@ public interface DrugLotDao {
 
     void delete(Long id);
 
+    void clean();
+
     Page<DrugLot> list(PaginationRequest pageRequest);
 
 }

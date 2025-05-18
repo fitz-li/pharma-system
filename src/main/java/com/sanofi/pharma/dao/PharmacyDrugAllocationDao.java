@@ -6,14 +6,16 @@ import java.util.List;
 
 public interface PharmacyDrugAllocationDao {
 
-    List<PharmacyDrugAllocation> getByDrugId(Long drugId);
+    List<PharmacyDrugAllocation> getByDrugId(Long pharmacyId, Long drugId);
 
     List<PharmacyDrugAllocation> listByPharmacyId(Long pharmacyId);
 
 
     PharmacyDrugAllocation create(PharmacyDrugAllocation allocation);
 
-    void delete (Long id);
+    void delete(Long id);
+
+    void clean();
 
 
     int updateVersionAndLimitByIdAndVersion(Long id, Integer version, Integer newLimit);

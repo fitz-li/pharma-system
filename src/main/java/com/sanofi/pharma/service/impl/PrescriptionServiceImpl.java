@@ -5,6 +5,7 @@ import com.sanofi.pharma.dao.*;
 import com.sanofi.pharma.dto.api.prescription.*;
 import com.sanofi.pharma.exception.FulfillException;
 import com.sanofi.pharma.exception.LockException;
+import com.sanofi.pharma.exception.StockNotEnoughException;
 import com.sanofi.pharma.model.*;
 import com.sanofi.pharma.service.PrescriptionService;
 import com.sanofi.pharma.util.IdGenerator;
@@ -19,18 +20,15 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     private final Integer MAX_RETRY = 3;
     private final PharmacyDao pharmacyDao;
-    private final DrugLotDao drugDao;
     private final PrescriptionTrans trans;
     private final PrescriptionDao prescriptionDao;
 
     private final PharmacyDrugAllocationDao pharmacyDrugAllocationDao;
 
-    public PrescriptionServiceImpl(DrugLotDao drugDao,
-                                   PharmacyDao pharmacyDao,
+    public PrescriptionServiceImpl(PharmacyDao pharmacyDao,
                                    PrescriptionTrans trans,
                                    PrescriptionDao prescriptionDao,
                                    PharmacyDrugAllocationDao pharmacyDrugAllocationDao) {
-        this.drugDao = drugDao;
         this.pharmacyDao = pharmacyDao;
         this.prescriptionDao = prescriptionDao;
         this.pharmacyDrugAllocationDao = pharmacyDrugAllocationDao;
@@ -46,9 +44,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         }
 
         for (PrescriptionDrugReq drugInPrescription : req.getDrugs()) {
-            DrugLot drug = drugDao.get(drugInPrescription.getDrugId());
-            if (drug == null) {
-                throw new BadRequestException(String.format("Drug %d not existed", drugInPrescription.getDrugId()));
+            var allocations = pharmacyDrugAllocationDao.getByDrugId(req.getPharmacyId(), drugInPrescription.getDrugId());
+            var limit = 0;
+            for (PharmacyDrugAllocation allocation : allocations) {
+                limit += allocation.getAllocationLimit();
+            }
+            if (limit < drugInPrescription.getDosage()) {
+                throw new StockNotEnoughException(String.format("Drug %d is not enough", drugInPrescription.getDrugId()));
             }
         }
 
@@ -93,7 +95,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         plan.setFulfillDetailList(fulfillDetails);
         plan.setAllocationUpdateList(planAllocationList);
         for (PrescriptionDrug drug : prescription.getDrugs()) {
-            List<PharmacyDrugAllocation> allocationList = this.pharmacyDrugAllocationDao.getByDrugId(drug.getDrugId());
+            List<PharmacyDrugAllocation> allocationList = this.pharmacyDrugAllocationDao.getByDrugId(prescription.getPharmacyId(), drug.getDrugId());
 
             Integer acquiredDosage = drug.getDosage();
 
@@ -113,7 +115,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
             // not enough
             if (acquiredDosage != 0) {
-                throw new BadRequestException(String.format("Drug %d is not enough", drug.getDrugId()));
+                throw new StockNotEnoughException(String.format("Drug %d is not enough", drug.getDrugId()));
             }
         }
         return plan;

@@ -26,6 +26,11 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     }
 
     @Override
+    public void clean() {
+        this.prescriptionRepository.deleteAll();
+    }
+
+    @Override
     public boolean complete(Long id) {
         return prescriptionRepository.updateStatusById(id, PrescriptionStatus.FULFILLED) == 1;
     }

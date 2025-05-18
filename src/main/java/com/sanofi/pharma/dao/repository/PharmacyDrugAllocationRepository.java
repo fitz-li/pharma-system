@@ -19,7 +19,7 @@ public interface PharmacyDrugAllocationRepository extends JpaRepository<Pharmacy
      * @param today  the current date to compare against expiryDate
      * @return list of non-expired allocations
      */
-    List<PharmacyDrugAllocation> findByDrugIdAndExpiryDateAfter(Long drugId, Instant today);
+    List<PharmacyDrugAllocation> findByPharmacyIdAndDrugIdAndExpiryDateAfter(Long pharmacyId, Long drugId, Instant today);
 
     List<PharmacyDrugAllocation> findByPharmacyIdAndExpiryDateAfter(Long pharmacyId, Instant today);
 

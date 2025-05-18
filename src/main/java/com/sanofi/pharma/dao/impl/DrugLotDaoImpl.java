@@ -35,6 +35,11 @@ public class DrugLotDaoImpl implements DrugLotDao {
     }
 
     @Override
+    public void clean() {
+        drugRepository.deleteAll();
+    }
+
+    @Override
     public Page<DrugLot> list(@NotNull PaginationRequest pageRequest) {
         Pageable pageable = PageRequest.of(pageRequest.getPageNum(), pageRequest.getPageSize());
         return drugRepository.findAll(pageable);

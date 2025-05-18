@@ -25,4 +25,9 @@ public class PrescriptionDrugDaoImpl implements PrescriptionDrugDao {
     public List<PrescriptionDrug> listByPrescription(Long prescriptionId) {
         return prescriptionDrugRepository.findByPrescriptionId(prescriptionId);
     }
+
+    @Override
+    public void clean() {
+        prescriptionDrugRepository.deleteAll();
+    }
 }

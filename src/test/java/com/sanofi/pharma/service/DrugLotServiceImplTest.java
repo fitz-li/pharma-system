@@ -30,7 +30,7 @@ class DrugLotServiceImplTest {
     private DrugLotServiceImpl drugService;
 
     @Test
-    void createDrug_CallsDaoAndReturnsSaved() {
+    void testCreate() {
         //mock
         DrugLot expected = new DrugLot();
         when(drugLotDao.create(any(DrugLot.class))).thenReturn(expected);

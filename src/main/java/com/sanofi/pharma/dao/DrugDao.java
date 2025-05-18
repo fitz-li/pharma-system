@@ -8,4 +8,6 @@ public interface DrugDao {
     Drug get(Long id);
 
     void delete(Long id);
+
+    void clean();
 }

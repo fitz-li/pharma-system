@@ -9,4 +9,6 @@ public interface PrescriptionDrugDao {
 
     List<PrescriptionDrug> listByPrescription(Long prescriptionId);
 
+    void clean();
+
 }

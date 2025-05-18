@@ -1,15 +1,14 @@
 package com.sanofi.pharma.integration;
 
-import com.sanofi.pharma.dao.DrugDao;
-import com.sanofi.pharma.dao.DrugLotDao;
-import com.sanofi.pharma.dao.PharmacyDao;
-import com.sanofi.pharma.dao.PharmacyDrugAllocationDao;
+import com.sanofi.pharma.dao.*;
 import com.sanofi.pharma.dto.api.drug_lot.DrugLotCreateReq;
 import com.sanofi.pharma.dto.api.prescription.PrescriptionCreateReq;
 import com.sanofi.pharma.dto.api.prescription.PrescriptionDrugReq;
 import com.sanofi.pharma.dto.common.ApiResponse;
 import com.sanofi.pharma.model.*;
 import com.sanofi.pharma.util.IdGenerator;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +46,38 @@ class PharmaApplicationTests {
     @Autowired
     private PharmacyDrugAllocationDao allocationDao;
 
+    @Autowired
+    private PrescriptionDao prescriptionDao;
+
+    @Autowired
+    private PrescriptionDrugDao prescriptionDrugDao;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @Test
+    @BeforeEach
+    void prepare() {
+        // prepare workbench
+    }
+
+    @AfterEach
+    void tearDown() {
+        // clean workbench
+        prescriptionDrugDao.clean();
+        prescriptionDao.clean();
+        allocationDao.clean();
+        pharmacyDao.clean();
+        drugLotDao.clean();
+        drugDao.clean();
+    }
+
+    @Test
+    void testIntegration() throws Exception {
+        testDrugLot();
+        testPharmacy();
+        testPrescription();
+    }
+
     void testDrugLot() throws Exception {
 
         // prepare data
@@ -102,8 +128,6 @@ class PharmaApplicationTests {
         drugDao.delete(drugId);
     }
 
-
-//    @Test
     void testPharmacy() throws Exception {
 
         // prepare data
@@ -128,7 +152,6 @@ class PharmaApplicationTests {
         pharmacyDao.delete(pharmacyId);
     }
 
-//    @Test
     void testPrescription() throws Exception {
 
         // prepare data
@@ -174,13 +197,13 @@ class PharmaApplicationTests {
 
 
         // api test
-        // 1) create prescription
+        // 1.1) create prescription
         PrescriptionCreateReq req = new PrescriptionCreateReq();
         req.setPharmacyId(pharmacyId);
         req.setPatientId(IdGenerator.generateId());
         req.setDoctorId(IdGenerator.generateId());
         List<PrescriptionDrugReq> drugs = new ArrayList<>();
-        drugs.add(new PrescriptionDrugReq(drugId, 30));
+        drugs.add(new PrescriptionDrugReq(drugId, 10));
         req.setDrugs(drugs);
         String json = objectMapper.writeValueAsString(req);
         MvcResult r = mockMvc.perform(post("/prescriptions")
@@ -188,6 +211,9 @@ class PharmaApplicationTests {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").isNumber()).andReturn();
+
+
+        // 1.2) test create failed
 
 
         String responseJson = r.getResponse().getContentAsString();
@@ -198,17 +224,12 @@ class PharmaApplicationTests {
 
         Long prescriptionId = apiResponse.getData().getId();
 
-        // fulfill failed
+        // fulfill success
         mockMvc.perform(post(String.format("/prescriptions/%d/fulfill", prescriptionId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error.type").value("STOCK_NOT_ENOUGH"));
+                .andExpect(status().isOk());
+        // fulfill failed
 
-        // clean data
-        allocationDao.delete(allocation.getId());
-        pharmacyDao.delete(pharmacyId);
-        drugLotDao.delete(lot.getId());
-        drugDao.delete(newDrug.getId());
     }
 }

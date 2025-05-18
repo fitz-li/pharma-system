@@ -19,8 +19,8 @@ public class PharmacyDrugAllocationDaoImpl implements PharmacyDrugAllocationDao 
 
 
     @Override
-    public List<PharmacyDrugAllocation> getByDrugId(Long drugId) {
-        return pharmacyDrugAllocationRepository.findByDrugIdAndExpiryDateAfter(drugId, Instant.now());
+    public List<PharmacyDrugAllocation> getByDrugId(Long pharmacyId, Long drugId) {
+        return pharmacyDrugAllocationRepository.findByPharmacyIdAndDrugIdAndExpiryDateAfter(pharmacyId, drugId, Instant.now());
     }
 
     @Override
@@ -36,6 +36,11 @@ public class PharmacyDrugAllocationDaoImpl implements PharmacyDrugAllocationDao 
     @Override
     public void delete(Long id) {
         pharmacyDrugAllocationRepository.deleteById(id);
+    }
+
+    @Override
+    public void clean() {
+        pharmacyDrugAllocationRepository.deleteAll();
     }
 
     @Override

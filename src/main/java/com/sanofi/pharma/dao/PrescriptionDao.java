@@ -8,6 +8,8 @@ public interface PrescriptionDao {
 
     Prescription get(Long id);
 
+    void clean();
+
     boolean complete(Long id);
 
     boolean failed(Long id);

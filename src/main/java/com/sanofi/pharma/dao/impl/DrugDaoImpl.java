@@ -29,4 +29,9 @@ public class DrugDaoImpl implements DrugDao {
         drugRepository.deleteById(id);
     }
 
+    @Override
+    public void clean() {
+        drugRepository.deleteAll();
+    }
+
 }
