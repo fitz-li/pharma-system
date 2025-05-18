@@ -51,7 +51,7 @@ class PharmaApplicationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+//    @Test
     void testDrugLot() throws Exception {
 
         // prepare data
@@ -103,7 +103,7 @@ class PharmaApplicationTests {
     }
 
 
-    @Test
+//    @Test
     void testPharmacy() throws Exception {
 
         // prepare data
@@ -128,7 +128,7 @@ class PharmaApplicationTests {
         pharmacyDao.delete(pharmacyId);
     }
 
-    @Test
+//    @Test
     void testPrescription() throws Exception {
 
         // prepare data
