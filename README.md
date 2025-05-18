@@ -202,8 +202,13 @@ erDiagram
     AUDIT_LOG {
         LONG id PK
         BIGINT prescription_id FK
-        BIGINT drug_id FK
-        INT dosage
+        BIGINT doctor_id FK
+        BIGINT patient_id FK
+        BIGINT pharmacy_id FK
+        ENUM status
+        TEXT drugs_requested
+        TEXT drugs_dispensed
+        TEXT failure_reason
         TIMESTAMP_WITH_TIME_ZONE created_at
         TIMESTAMP_WITH_TIME_ZONE updated_at
     }
