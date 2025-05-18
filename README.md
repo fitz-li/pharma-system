@@ -1,7 +1,9 @@
 # PharmaFlow — Pharma Supply Chain & Prescription Fulfillment System
 
 ## 1. Project Overview
+
 PharmaFlow is a Spring Boot-based microservice for managing the pharmaceutical supply chain and prescription fulfillment lifecycle. It provides:
+
 - **Drug Inventory** with batch and expiry tracking
 - **Pharmacy Allocations** to enforce per-pharmacy drug limits
 - **Prescription Management**: create, validate, and fulfill prescriptions (all-or-nothing)
@@ -9,11 +11,12 @@ PharmaFlow is a Spring Boot-based microservice for managing the pharmaceutical s
 - **Audit Logging** of every prescription attempt (success or failure)
 - **RESTful API** documented with Swagger/OpenAPI
 
-Key components include Spring Data JPA (PostgreSQL), Lombok-powered entities, AOP-based audit aspect, JWT authentication filter, and a Snowflake ID generator for distributed primary keys.
+Key components include Spring Data JPA (PostgreSQL), Lombok-powered entities, AOP-based audit aspect, and a Snowflake ID generator for distributed primary keys.
 
 ---
 
 ## 2. Prerequisites
+
 - **Java 17+ SDK** (tested on OpenJDK 21)
 - **PostgreSQL 14+** database
 - **Gradle 8+** (or use the provided Gradle Wrapper)
@@ -75,6 +78,7 @@ Key components include Spring Data JPA (PostgreSQL), Lombok-powered entities, AO
 ## 4. Running Tests
 
 Run all unit and integration tests using:
+
 ```bash
 ./gradlew test
 ```
@@ -87,6 +91,7 @@ Run all unit and integration tests using:
 - OpenAPI spec: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 The API covers endpoints for:
+
 - Drug inventory, batch & expiry operations
 - Pharmacy allocations (view, update, concurrency handled)
 - Prescription creation, validation, fulfillment (all-or-nothing)
@@ -125,3 +130,67 @@ See Swagger UI for request/response schemas and try out the endpoints.
 ---
 
 For contribution guidelines, troubleshooting, or further documentation, see the `docs/` folder or open an issue.
+
+## Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    DRUG {
+        LONG id PK
+        VARCHAR name
+        VARCHAR manufacturer
+        VARCHAR batch_number
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+    PHARMACY {
+        LONG id PK
+        VARCHAR name
+        VARCHAR address
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+    PHARMACY_DRUG_ALLOCATION {
+        LONG id PK
+        BIGINT drug_id FK
+        BIGINT pharmacy_id FK
+        INT allocation_limit
+        BIGINT version
+    }
+    PRESCRIPTION {
+        LONG id PK
+        BIGINT doctor_id
+        BIGINT patient_id
+        BIGINT pharmacy_id FK
+        ENUM status
+        TEXT drugs_requested
+        TEXT drugs_dispensed
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+    PRESCRIPTION_DRUG {
+        LONG id PK
+        BIGINT prescription_id FK
+        BIGINT drug_id FK
+        VARCHAR dosage
+    }
+    AUDIT_LOG {
+        LONG id PK
+        BIGINT doctor_id
+        BIGINT prescription_id FK
+        BIGINT patient_id
+        BIGINT pharmacy_id
+        TEXT drugs_requested
+        TEXT drugs_dispensed
+        ENUM status
+        VARCHAR failure_reason
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    DRUG ||--o{ PHARMACY_DRUG_ALLOCATION : "has allocation"
+    PHARMACY ||--o{ PHARMACY_DRUG_ALLOCATION : "allocates drug"
+    DRUG ||--o{ PRESCRIPTION_DRUG : "included in"
+    PRESCRIPTION ||--o{ PRESCRIPTION_DRUG : "contains"
+    PRESCRIPTION ||--o{ AUDIT_LOG : "audited by"
+```
