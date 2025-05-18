@@ -134,63 +134,82 @@ For contribution guidelines, troubleshooting, or further documentation, see the 
 ## Entity Relationship Diagram
 
 ```mermaid
-erDiagram
-    DRUG {
-        LONG id PK
-        VARCHAR name
-        VARCHAR manufacturer
-        VARCHAR batch_number
-        TIMESTAMP_WITH_TIME_ZONE created_at
-        TIMESTAMP_WITH_TIME_ZONE updated_at
-    }
-    PHARMACY {
-        LONG id PK
-        VARCHAR name
-        VARCHAR address
-        TIMESTAMP_WITH_TIME_ZONE created_at
-        TIMESTAMP_WITH_TIME_ZONE updated_at
-    }
-    PHARMACY_DRUG_ALLOCATION {
-        LONG id PK
-        BIGINT drug_id FK
-        BIGINT pharmacy_id FK
-        INT allocation_limit
-        BIGINT version
-    }
-    PRESCRIPTION {
-        LONG id PK
-        BIGINT doctor_id
-        BIGINT patient_id
-        BIGINT pharmacy_id FK
-        ENUM status
-        TEXT drugs_requested
-        TEXT drugs_dispensed
-        TIMESTAMP_WITH_TIME_ZONE created_at
-        TIMESTAMP_WITH_TIME_ZONE updated_at
-    }
-    PRESCRIPTION_DRUG {
-        LONG id PK
-        BIGINT prescription_id FK
-        BIGINT drug_id FK
-        VARCHAR dosage
-    }
-    AUDIT_LOG {
-        LONG id PK
-        BIGINT doctor_id
-        BIGINT prescription_id FK
-        BIGINT patient_id
-        BIGINT pharmacy_id
-        TEXT drugs_requested
-        TEXT drugs_dispensed
-        ENUM status
-        VARCHAR failure_reason
-        TIMESTAMP_WITH_TIME_ZONE created_at
-        TIMESTAMP_WITH_TIME_ZONE updated_at
-    }
+classDiagram
+direction BT
+class audit_log {
+   timestamp with time zone created_at
+   bigint doctor_id
+   text drugs_dispensed
+   text drugs_requested
+   varchar(255) failure_reason
+   bigint patient_id
+   bigint pharmacy_id
+   bigint prescription_id
+   varchar(255) status
+   timestamp with time zone updated_at
+   bigint id
+}
+class drug {
+   timestamp with time zone created_at
+   varchar(255) name
+   timestamp with time zone updated_at
+   bigint id
+}
+class drug_lot {
+   varchar(255) batch_number
+   timestamp with time zone created_at
+   timestamp(6) with time zone expiry_date
+   varchar(255) manufacturer
+   varchar(255) name
+   integer stock
+   timestamp with time zone updated_at
+   bigint drug_id
+   bigint id
+}
+class pharmacy {
+   timestamp with time zone created_at
+   varchar(255) location
+   varchar(255) name
+   timestamp with time zone updated_at
+   bigint id
+}
+class pharmacy_drug_allocation {
+   integer allocation_limit
+   timestamp with time zone created_at
+   timestamp(6) with time zone expiry_date
+   timestamp with time zone updated_at
+   integer version
+   bigint drug_id
+   bigint drug_lot_id
+   bigint pharmacy_id
+   bigint id
+}
+class prescription {
+   timestamp with time zone created_at
+   bigint doctor_id
+   bigint patient_id
+   bigint pharmacy_id
+   varchar(255) status
+   timestamp with time zone updated_at
+   bigint id
+}
+class prescription_drug {
+   timestamp with time zone created_at
+   integer dosage
+   bigint drug_id
+   timestamp with time zone updated_at
+   bigint prescription_id
+   bigint id
+}
 
-    DRUG ||--o{ PHARMACY_DRUG_ALLOCATION : "has allocation"
-    PHARMACY ||--o{ PHARMACY_DRUG_ALLOCATION : "allocates drug"
-    DRUG ||--o{ PRESCRIPTION_DRUG : "included in"
-    PRESCRIPTION ||--o{ PRESCRIPTION_DRUG : "contains"
-    PRESCRIPTION ||--o{ AUDIT_LOG : "audited by"
+audit_log  -->  pharmacy : pharmacy_id:id
+audit_log  -->  prescription : prescription_id:id
+drug_lot  -->  drug : drug_id:id
+pharmacy_drug_allocation  -->  drug : drug_id:id
+pharmacy_drug_allocation  -->  drug_lot : drug_lot_id:id
+pharmacy_drug_allocation  -->  pharmacy : pharmacy_id:id
+prescription  -->  pharmacy : pharmacy_id:id
+prescription_drug  -->  drug : drug_id:id
+prescription_drug  -->  prescription : prescription_id:id
+
 ```
