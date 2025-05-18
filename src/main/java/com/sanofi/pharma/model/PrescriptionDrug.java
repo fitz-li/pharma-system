@@ -1,5 +1,8 @@
 package com.sanofi.pharma.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +23,8 @@ public class PrescriptionDrug {
 
     @ManyToOne
     @JoinColumn(name = "prescription_id", nullable = false)
+    @JsonBackReference
+    @JsonIgnore
     private Prescription prescription;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")

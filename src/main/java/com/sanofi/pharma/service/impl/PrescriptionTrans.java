@@ -41,6 +41,7 @@ public class PrescriptionTrans {
             totalAffected += updated;
         }
         if (totalAffected < allocationList.size()) {
+            prescriptionDao.failed(id);
             throw new LockException();
         }
         if (!prescriptionDao.complete(id)) {

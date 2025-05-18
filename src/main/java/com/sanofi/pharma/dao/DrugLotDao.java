@@ -9,6 +9,8 @@ public interface DrugLotDao {
 
     DrugLot get(Long id);
 
+    void delete(Long id);
+
     Page<DrugLot> list(PaginationRequest pageRequest);
 
 }

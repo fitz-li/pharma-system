@@ -29,4 +29,9 @@ public class PrescriptionDaoImpl implements PrescriptionDao {
     public boolean complete(Long id) {
         return prescriptionRepository.updateStatusById(id, PrescriptionStatus.FULFILLED) == 1;
     }
+
+    @Override
+    public boolean failed(Long id) {
+        return prescriptionRepository.updateStatusById(id, PrescriptionStatus.FAILED) == 1;
+    }
 }

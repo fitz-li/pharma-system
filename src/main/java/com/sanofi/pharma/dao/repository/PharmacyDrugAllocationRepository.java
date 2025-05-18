@@ -21,6 +21,8 @@ public interface PharmacyDrugAllocationRepository extends JpaRepository<Pharmacy
      */
     List<PharmacyDrugAllocation> findByDrugIdAndExpiryDateAfter(Long drugId, Instant today);
 
+    List<PharmacyDrugAllocation> findByPharmacyIdAndExpiryDateAfter(Long pharmacyId, Instant today);
+
     @Modifying
     @Transactional
     @Query("""

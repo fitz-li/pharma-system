@@ -1,6 +1,5 @@
 package com.sanofi.pharma.dto.api.prescription;
 
-import com.sanofi.pharma.model.Drug;
 import com.sanofi.pharma.model.Prescription;
 import com.sanofi.pharma.model.PrescriptionDrug;
 import lombok.Data;
@@ -27,10 +26,11 @@ public class PrescriptionCreateReq {
         return p;
     }
 
-    public List<PrescriptionDrug> getPrescriptionDrugs() {
+    public List<PrescriptionDrug> listDrugs() {
         List<PrescriptionDrug> drugRecords = new ArrayList<>();
         for (PrescriptionDrugReq drugInPrescription : this.getDrugs()) {
             PrescriptionDrug drug = new PrescriptionDrug();
+            drug.setDrugId(drugInPrescription.getDrugId());
             drug.setDosage(drugInPrescription.getDosage());
             drugRecords.add(drug);
         }

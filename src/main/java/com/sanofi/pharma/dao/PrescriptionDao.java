@@ -10,4 +10,6 @@ public interface PrescriptionDao {
 
     boolean complete(Long id);
 
+    boolean failed(Long id);
+
 }

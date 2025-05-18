@@ -9,4 +9,8 @@ public interface PharmacyDao {
     Page<Pharmacy> list(PaginationRequest pageRequest);
 
     Pharmacy get(Long id);
+
+    Pharmacy create(Pharmacy pharmacy);
+
+    void delete(Long id);
 }

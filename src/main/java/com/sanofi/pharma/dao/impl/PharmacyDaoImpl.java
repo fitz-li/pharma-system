@@ -10,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class PharmacyDaoImpl implements PharmacyDao {
 
@@ -30,6 +28,16 @@ public class PharmacyDaoImpl implements PharmacyDao {
 
     @Override
     public Pharmacy get(Long id) {
-        return pharmacyRepository.getById(id);
+        return pharmacyRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Pharmacy create(Pharmacy pharmacy) {
+        return pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    public void delete(Long id) {
+        pharmacyRepository.deleteById(id);
     }
 }

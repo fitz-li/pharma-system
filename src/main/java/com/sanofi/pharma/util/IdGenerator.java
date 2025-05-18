@@ -74,7 +74,7 @@ public class IdGenerator {
     }
 
 
-    public static long generateRelationId() {
+    public static long generateId() {
         return getInstance().nextId();
     }
 

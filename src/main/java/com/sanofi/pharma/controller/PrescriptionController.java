@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
-@RequestMapping("/prescription")
+@RequestMapping("/prescriptions")
 public class PrescriptionController {
     private final PrescriptionService service;
 
@@ -23,14 +23,14 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public ApiResponse<Prescription> create(@Valid @ModelAttribute PrescriptionCreateReq req) throws BadRequestException {
+    public ApiResponse<Prescription> create(@Valid @RequestBody PrescriptionCreateReq req) throws BadRequestException {
         return new ApiResponse<>(service.create(req));
     }
 
     @PostMapping("/{prescriptionId}/fulfill")
     public ApiResponse<List<FulfillDetail>> fulfill(
             @PathVariable("prescriptionId") Long prescriptionId,
-            @Valid @ModelAttribute PrescriptionFulfillReq req
+            @Valid @RequestBody PrescriptionFulfillReq req
     ) throws BadRequestException {
         req.setPrescriptionId(prescriptionId);
         return new ApiResponse<>(service.fulfill(req));

@@ -55,9 +55,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Prescription prescription = req.toEntity();
         prescription.setStatus(PrescriptionStatus.PENDING);
         prescription.setId(IdGenerator.generatePrescriptionId());
-        List<PrescriptionDrug> prescriptionDrugs = req.getPrescriptionDrugs();
+        List<PrescriptionDrug> prescriptionDrugs = req.listDrugs();
         for (PrescriptionDrug prescriptionDrug : prescriptionDrugs) {
-            prescriptionDrug.setId(IdGenerator.generateRelationId());
+            prescriptionDrug.setId(IdGenerator.generateId());
             prescriptionDrug.setPrescription(new Prescription(prescription.getId()));
         }
         trans.createRecords(prescription, prescriptionDrugs);
@@ -65,12 +65,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
+    @Audit
     public List<FulfillDetail> fulfill(PrescriptionFulfillReq req) throws BadRequestException {
         Prescription prescription = prescriptionDao.get(req.getPrescriptionId());
         return fulfillRetry(prescription);
     }
 
-    @Audit
     private List<FulfillDetail> fulfillRetry(Prescription prescription) throws BadRequestException {
         for (int i = 0; i < MAX_RETRY; i++) {
             try {

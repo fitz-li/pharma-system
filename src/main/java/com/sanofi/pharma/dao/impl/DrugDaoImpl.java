@@ -24,4 +24,9 @@ public class DrugDaoImpl implements DrugDao {
         return drugRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public void delete(Long id) {
+        drugRepository.deleteById(id);
+    }
+
 }

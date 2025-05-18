@@ -2,7 +2,6 @@ package com.sanofi.pharma.dao.impl;
 
 import com.sanofi.pharma.dao.DrugLotDao;
 import com.sanofi.pharma.dto.common.PaginationRequest;
-import com.sanofi.pharma.model.Drug;
 import com.sanofi.pharma.dao.repository.DrugLotRepository;
 import com.sanofi.pharma.model.DrugLot;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +26,12 @@ public class DrugLotDaoImpl implements DrugLotDao {
 
     @Override
     public DrugLot get(Long id) {
-        return drugRepository.getById(id);
+        return drugRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void delete(Long id) {
+        drugRepository.deleteById(id);
     }
 
     @Override

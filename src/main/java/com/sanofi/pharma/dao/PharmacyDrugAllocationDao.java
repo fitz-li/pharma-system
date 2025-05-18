@@ -8,6 +8,13 @@ public interface PharmacyDrugAllocationDao {
 
     List<PharmacyDrugAllocation> getByDrugId(Long drugId);
 
+    List<PharmacyDrugAllocation> listByPharmacyId(Long pharmacyId);
+
+
+    PharmacyDrugAllocation create(PharmacyDrugAllocation allocation);
+
+    void delete (Long id);
+
 
     int updateVersionAndLimitByIdAndVersion(Long id, Integer version, Integer newLimit);
 }

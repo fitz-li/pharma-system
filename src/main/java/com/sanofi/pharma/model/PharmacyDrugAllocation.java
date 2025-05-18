@@ -19,7 +19,9 @@ public class PharmacyDrugAllocation {
     @Id
     private Long id;
 
-    private Long pharmacyId;
+    @ManyToOne
+    @JoinColumn(name = "pharmacy_id", nullable = false)
+    private Pharmacy pharmacy;
 
     @ManyToOne
     @JoinColumn(name = "drug_id", nullable = false)
