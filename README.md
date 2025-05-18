@@ -134,82 +134,87 @@ For contribution guidelines, troubleshooting, or further documentation, see the 
 ## Entity Relationship Diagram
 
 ```mermaid
-classDiagram
-direction BT
-class audit_log {
-   timestamp with time zone created_at
-   bigint doctor_id
-   text drugs_dispensed
-   text drugs_requested
-   varchar(255) failure_reason
-   bigint patient_id
-   bigint pharmacy_id
-   bigint prescription_id
-   varchar(255) status
-   timestamp with time zone updated_at
-   bigint id
-}
-class drug {
-   timestamp with time zone created_at
-   varchar(255) name
-   timestamp with time zone updated_at
-   bigint id
-}
-class drug_lot {
-   varchar(255) batch_number
-   timestamp with time zone created_at
-   timestamp(6) with time zone expiry_date
-   varchar(255) manufacturer
-   varchar(255) name
-   integer stock
-   timestamp with time zone updated_at
-   bigint drug_id
-   bigint id
-}
-class pharmacy {
-   timestamp with time zone created_at
-   varchar(255) location
-   varchar(255) name
-   timestamp with time zone updated_at
-   bigint id
-}
-class pharmacy_drug_allocation {
-   integer allocation_limit
-   timestamp with time zone created_at
-   timestamp(6) with time zone expiry_date
-   timestamp with time zone updated_at
-   integer version
-   bigint drug_id
-   bigint drug_lot_id
-   bigint pharmacy_id
-   bigint id
-}
-class prescription {
-   timestamp with time zone created_at
-   bigint doctor_id
-   bigint patient_id
-   bigint pharmacy_id
-   varchar(255) status
-   timestamp with time zone updated_at
-   bigint id
-}
-class prescription_drug {
-   timestamp with time zone created_at
-   integer dosage
-   bigint drug_id
-   timestamp with time zone updated_at
-   bigint prescription_id
-   bigint id
-}
+erDiagram
+    DRUG {
+        LONG id PK
+        VARCHAR name
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
 
-audit_log  -->  pharmacy : pharmacy_id:id
-audit_log  -->  prescription : prescription_id:id
-drug_lot  -->  drug : drug_id:id
-pharmacy_drug_allocation  -->  drug : drug_id:id
-pharmacy_drug_allocation  -->  drug_lot : drug_lot_id:id
-pharmacy_drug_allocation  -->  pharmacy : pharmacy_id:id
-prescription  -->  pharmacy : pharmacy_id:id
-prescription_drug  -->  drug : drug_id:id
-prescription_drug  -->  prescription : prescription_id:id
+    DRUG_LOT {
+        LONG id PK
+        BIGINT drug_id FK
+        VARCHAR name
+        VARCHAR manufacturer
+        VARCHAR batch_number
+        TIMESTAMP_WITH_TIME_ZONE expiry_date
+        INT stock
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
 
+    PHARMACY {
+        LONG id PK
+        VARCHAR name
+        VARCHAR location
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    PATIENT {
+        LONG id PK
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    PHARMACY_DRUG_ALLOCATION {
+        LONG id PK
+        BIGINT pharmacy_id FK
+        BIGINT drug_id FK
+        BIGINT drug_lot_id FK
+        INT allocation_limit
+        INT version
+        TIMESTAMP_WITH_TIME_ZONE expiry_date
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    PRESCRIPTION {
+        LONG id PK
+        BIGINT patient_id FK
+        BIGINT doctor_id FK
+        BIGINT pharmacy_id FK
+        ENUM status
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    PRESCRIPTION_DRUG {
+        LONG id PK
+        BIGINT prescription_id FK
+        BIGINT drug_id FK
+        INT dosage
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    AUDIT_LOG {
+        LONG id PK
+        BIGINT prescription_id FK
+        BIGINT drug_id FK
+        INT dosage
+        TIMESTAMP_WITH_TIME_ZONE created_at
+        TIMESTAMP_WITH_TIME_ZONE updated_at
+    }
+
+    DRUG ||--o{ DRUG_LOT: has_batches
+    DRUG ||--o{ PHARMACY_DRUG_ALLOCATION: allocated_in
+    DRUG_LOT ||--o{ PHARMACY_DRUG_ALLOCATION: used_for_allocation
+    PHARMACY ||--o{ PHARMACY_DRUG_ALLOCATION: allocates
+    PHARMACY ||--o{ PRESCRIPTION: fulfill
+    PRESCRIPTION ||--o{ PRESCRIPTION_DRUG: contains
+    PRESCRIPTION ||--|| AUDIT_LOG: records
+    PHARMACY ||--o{ AUDIT_LOG: records
+    PATIENT ||--o{ PRESCRIPTION: have
 ```
