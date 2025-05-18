@@ -99,7 +99,7 @@ class PharmaApplicationTests {
         lot.setExpiryDate(Instant.now().plusSeconds(86400));
         lot.setStock(50);
         String json = objectMapper.writeValueAsString(lot);
-        MvcResult r = mockMvc.perform(post("/drug-lots")
+        MvcResult r = mockMvc.perform(post("/pharma/v1/drug-lots")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -116,7 +116,7 @@ class PharmaApplicationTests {
 
 
         // 2) List drugs and verify the created one is present
-        mockMvc.perform(get("/drug-lots")
+        mockMvc.perform(get("/pharma/v1/drug-lots")
                         .param("pageNum", "0")
                         .param("pageSize", "10"))
                 .andExpect(status().isOk())
@@ -143,7 +143,7 @@ class PharmaApplicationTests {
 
         // api test
         // 1) List pharmacy and verify the created one is present
-        mockMvc.perform(get("/pharmacies")
+        mockMvc.perform(get("/pharma/v1/pharmacies")
                         .param("pageNum", "0")
                         .param("pageSize", "10"))
                 .andExpect(status().isOk())
@@ -206,7 +206,7 @@ class PharmaApplicationTests {
         drugs.add(new PrescriptionDrugReq(drugId, 10));
         req.setDrugs(drugs);
         String json = objectMapper.writeValueAsString(req);
-        MvcResult r = mockMvc.perform(post("/prescriptions")
+        MvcResult r = mockMvc.perform(post("/pharma/v1/prescriptions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -225,7 +225,7 @@ class PharmaApplicationTests {
         Long prescriptionId = apiResponse.getData().getId();
 
         // fulfill success
-        mockMvc.perform(post(String.format("/prescriptions/%d/fulfill", prescriptionId))
+        mockMvc.perform(post(String.format("/pharma/v1/prescriptions/%d/fulfill", prescriptionId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
