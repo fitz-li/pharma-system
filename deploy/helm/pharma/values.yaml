@@ -1,0 +1,34 @@
+replicaCount: 2
+
+image:
+  repository: pharmaflow
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# Uncomment & configure ingress if needed
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env:
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:postgresql://postgres:5432/pharmaflow"
+  - name: SPRING_DATASOURCE_USERNAME
+    value: "pharma"
+  - name: SPRING_DATASOURCE_PASSWORD
+    value: "password"
