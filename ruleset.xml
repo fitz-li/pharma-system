@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="PharmaFlow PMD Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    <description>
+        Custom PMD ruleset for the PharmaFlow project,
+        combining best practices, code style, design, performance, and unused code checks.
+    </description>
+
+    <!-- Best Practices -->
+    <rule ref="category/java/bestpractices.xml/AvoidPrintStackTrace"/>
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningLoopVariables"/>
+
+    <!-- Code Style -->
+    <rule ref="category/java/codestyle.xml/AvoidDuplicateLiterals"/>
+    <rule ref="category/java/codestyle.xml/VariableNamingConventions"/>
+    <rule ref="category/java/codestyle.xml/MethodNamingConventions"/>
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions"/>
+
+    <!-- Design -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <priority>3</priority>
+        <properties>
+            <property name="methodReportLevel" value="10"/>
+        </properties>
+    </rule>
+    <rule ref="category/java/design.xml/LooseCoupling"/>
+
+    <!-- Performance -->
+    <rule ref="category/java/performance.xml/UseStringBufferForStringAppends"/>
+    <rule ref="category/java/performance.xml/AvoidInstantiatingObjectsInLoops"/>
+
+    <!-- Error Prone -->
+    <rule ref="category/java/errorprone.xml/NullAssignment"/>
+    <rule ref="category/java/errorprone.xml/AvoidEmptyCatchBlock"/>
+
+    <!-- Unused Code -->
+    <rule ref="category/java/unusedcode.xml/UnusedImports"/>
+    <rule ref="category/java/unusedcode.xml/UnusedLocalVariable"/>
+    <rule ref="category/java/unusedcode.xml/UnusedPrivateField"/>
+
+    <!-- Imports -->
+    <rule ref="category/java/imports.xml/AvoidStarImport"/>
+
+    <!-- Additional security checks can be added here -->
+</ruleset>
